@@ -1,6 +1,7 @@
 import axios from "axios";
 import Input from "@/components/input";
 import { useCallback, useState } from "react";
+import {signIn} from 'next-auth/react'
 const Auth = () => {
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
@@ -8,7 +9,7 @@ const Auth = () => {
     const [variant, setVariant] = useState('login');
 
     const togglevariant = useCallback(() => {
-        setVariant((currentVariant) => currentVariant == 'login' ? 'register' : 'login');
+        setVariant((currentVariant) => currentVariant === 'login' ? 'register' : 'login');
     },[]);
     const register = useCallback(async()=>{
         try{
@@ -21,6 +22,20 @@ const Auth = () => {
             console.log(error)
         }
     }, [email, name, password]);
+    const login = useCallback(async() => {
+         try{
+            await signIn('credentials', {
+                email,
+                password,
+                redirect: false,
+                callbackUrl: '/'
+            })
+         }catch
+            (error){
+                console.log(error);
+            }
+         
+    }, [email, password]);
     return (
     
         <div className="relative h-full w-full bg-[url('/images/hero.jpg')] bg-no-repeat bg-center bg-fixed bg-cover">
@@ -54,7 +69,7 @@ const Auth = () => {
                         type="password"
                         value={password} />
                          </div>
-                         <button onClick={register} className="w-full py-3 mt-10 text-white transition bg-red-600 rounded-md hover:bg-red-700">{variant == 'login' ? 'Login' : 'Signup'}</button>
+                         <button onClick={variant == 'login' ? login : register } className="w-full py-3 mt-10 text-white transition bg-red-600 rounded-md hover:bg-red-700">{variant == 'login' ? 'Login' : 'Signup'}</button>
                          <p className="mt-12 text-neutral-500">
                             {variant =='login'? 'First time using Netflix?': 'Already have an account?'}
                             <span onClick={togglevariant} className="ml-1 text-white cursor-pointer hover:underline">
