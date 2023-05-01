@@ -7,6 +7,8 @@ const useMovieList = () => {
     revalidateIfStale: false,
     revalidateOnFocus: false,
     revalidateOnReconnect: false,
+    
+  
   });
 
   return {

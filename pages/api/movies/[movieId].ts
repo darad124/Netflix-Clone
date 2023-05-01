@@ -20,6 +20,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       throw new Error('Missing Id');
     }
 
+    // Log the value of movieId
+    console.log('movieId:', movieId);
+
+    // Validate that movieId is a valid ObjectID
+    if (!/^[0-9a-fA-F]{24}$/.test(movieId)) {
+      throw new Error('Invalid ObjectID');
+    }
+
     const movies = await prismadb.movie.findUnique({
       where: {
         id: movieId
